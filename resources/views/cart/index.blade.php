@@ -29,8 +29,7 @@
                                 <div class="mt-4 sm:mt-0 sm:pr-9">
                                     <label for="quantity-{{ $item->id }}" class="sr-only">Quantity</label>
                                     <select id="quantity-{{ $item->id }}" name="quantity-{{ $item->id }}" 
-                                            class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm"
-                                            onchange="updateQuantity({{ $item->id }}, this.value)">
+                                            class="max-w-full rounded-md border border-gray-300 py-1.5 text-left text-base font-medium leading-5 text-gray-700 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-1 focus:ring-indigo-500 sm:text-sm">
                                         @for($i = 1; $i <= 10; $i++)
                                         <option value="{{ $i }}" {{ $item->quantity == $i ? 'selected' : '' }}>{{ $i }}</option>
                                         @endfor
@@ -38,7 +37,7 @@
 
                                     <div class="absolute top-0 right-0">
                                         <button type="button" class="remove-from-cart -m-2 inline-flex p-2 text-gray-400 hover:text-gray-500" 
-                                                onclick="removeItem({{ $item->id }})">
+                                                data-id="{{ $item->id }}">
                                             <span class="sr-only">Remove</span>
                                             <svg class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                                 <path d="M6.28 5.22a.75.75 0 00-1.06 1.06L8.94 10l-3.72 3.72a.75.75 0 101.06 1.06L10 11.06l3.72 3.72a.75.75 0 101.06-1.06L11.06 10l3.72-3.72a.75.75 0 00-1.06-1.06L10 8.94 6.28 5.22z" />
@@ -88,7 +87,7 @@
                 </div>
 
                 <div class="mt-6">
-                    <a href="{{ route('cart.checkout') }}" class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                    <a href="{{ route('cart.user.checkout') }}" class="w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
                         Checkout
                     </a>
                 </div>
@@ -98,40 +97,5 @@
     </div>
 </div>
 
-@push('scripts')
-<script>
-    function updateQuantity(itemId, quantity) {
-        fetch(`/cart/${itemId}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-            },
-            body: JSON.stringify({ quantity: quantity })
-        })
-        .then(response => {
-            if (response.ok) {
-                window.location.reload();
-            }
-        });
-    }
-
-    function removeItem(itemId) {
-        if (confirm('Are you sure you want to remove this item from your cart?')) {
-            fetch(`/cart/${itemId}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    window.location.reload();
-                }
-            });
-        }
-    }
-</script>
-@endpush
+@vite(['resources/js/app.js'])
 @endsection

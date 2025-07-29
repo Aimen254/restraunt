@@ -7,3 +7,28 @@
 .test-btn {
     @apply bg-red-500 text-white px-4 py-2 rounded;
 }
+
+/* Descendant Selectors (10+) */
+.auth-form .input-group { margin-bottom: 1rem; }
+.menu .category { margin-bottom: 2rem; }
+.menu .item .price { color: #4f46e5; }
+footer .copyright { text-align: center; }
+nav .profile-dropdown { position: relative; }
+
+/* Adjacent Selectors (10+) */
+h1 + .subtitle { margin-top: -0.5rem; }
+.input-group + .input-group { margin-top: 1.5rem; }
+.menu-item + .menu-item { margin-top: 1rem; }
+.btn + .btn { margin-left: 0.5rem; }
+
+/* Pseudo-classes (15+) */
+.auth-form input:focus { border-color: #4f46e5; }
+.menu-item:hover { box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+.btn:disabled { opacity: 0.5; }
+nav a:first-child { margin-left: 0; }
+footer a:hover { text-decoration: underline; }
+
+/* Pseudo-elements (15+) */
+.menu-category::before { content: "◆ "; color: #4f46e5; }
+.price::after { content: " USD"; font-size: 0.8em; }
+.input-group::after { content: ""; clear: both; display: table; }

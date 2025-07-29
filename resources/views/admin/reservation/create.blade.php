@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Add Menu Item')
 @section('header', 'Add New Menu Item')

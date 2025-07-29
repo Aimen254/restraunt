@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('spa')
 
 @section('title', 'Checkout')
 @section('header', 'Complete Your Order')
@@ -10,9 +10,17 @@
             <div class="lg:col-span-2">
                 <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl">Checkout</h1>
                 
-                <form action="{{ route('cart.process-checkout') }}" method="POST" class="mt-8">
+                <form action="{{ route('cart.user.process-checkout') }}" method="POST" class="mt-8">
                     @csrf
-                    
+                    @if ($errors->any())
+                        <div class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <input type="hidden" name="total_amount" value="{{ $total }}">
                     <input type="hidden" name="tax_amount" value="{{ $tax }}">
                     
@@ -23,19 +31,19 @@
                             <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div class="sm:col-span-2">
                                     <label class="flex items-center">
-                                        <input type="radio" name="is_delivery" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked>
+                                        <input type="radio" name="is_delivery" value="0" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked  {{ old('is_delivery', 0) == 0 ? 'checked' : '' }}>
                                         <span class="ml-3 block text-sm font-medium text-gray-700">Pickup</span>
                                     </label>
                                 </div>
                                 <div class="sm:col-span-2">
                                     <label class="flex items-center">
-                                        <input type="radio" name="is_delivery" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
+                                        <input type="radio" name="is_delivery" value="1" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500"  {{ old('is_delivery', 0) == 0 ? 'checked' : '' }}>
                                         <span class="ml-3 block text-sm font-medium text-gray-700">Delivery (+$5.00)</span>
                                     </label>
                                 </div>
                                 <div class="sm:col-span-2" id="delivery-address-container" style="display: none;">
                                     <label for="delivery-address" class="block text-sm font-medium text-gray-700">Delivery address</label>
-                                    <input type="text" name="delivery_address" id="delivery-address" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <input type="text" name="delivery_address" id="delivery-address" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" value="{{ old('delivery_address') }}">
                                 </div>
                             </div>
                         </div>
@@ -46,14 +54,8 @@
                             <div class="mt-4 grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-4">
                                 <div>
                                     <label class="flex items-center">
-                                        <input type="radio" name="payment_method" value="cash" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked>
+                                        <input type="radio" name="payment_method" value="cash" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500" checked  {{ old('payment_method', 'cash') == 'cash' ? 'checked' : '' }} >
                                         <span class="ml-3 block text-sm font-medium text-gray-700">Cash</span>
-                                    </label>
-                                </div>
-                                <div>
-                                    <label class="flex items-center">
-                                        <input type="radio" name="payment_method" value="card" class="h-4 w-4 text-indigo-600 border-gray-300 focus:ring-indigo-500">
-                                        <span class="ml-3 block text-sm font-medium text-gray-700">Credit Card</span>
                                     </label>
                                 </div>
                             </div>
@@ -105,7 +107,7 @@
                         <!-- Special Instructions -->
                         <div>
                             <label for="special_instructions" class="block text-sm font-medium text-gray-700">Special instructions</label>
-                            <textarea id="special_instructions" name="special_instructions" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"></textarea>
+                            <textarea id="special_instructions" name="special_instructions" rows="4" class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">{{ old('special_instructions') }}</textarea>
                         </div>
                         
                         <div class="flex justify-end">
@@ -122,13 +124,25 @@
 
 @push('scripts')
 <script>
-    // Show/hide delivery address based on selection
-    document.querySelectorAll('input[name="is_delivery"]').forEach(radio => {
-        radio.addEventListener('change', function() {
-            document.getElementById('delivery-address-container').style.display = 
-                this.value === '1' ? 'block' : 'none';
-        });
+document.addEventListener('DOMContentLoaded', function() {
+    // Get all radio buttons
+    const deliveryRadios = document.querySelectorAll('input[name="is_delivery"]');
+    const addressContainer = document.getElementById('delivery-address-container');
+
+    // Function to toggle address visibility
+    function toggleAddressVisibility() {
+        const selectedValue = document.querySelector('input[name="is_delivery"]:checked').value;
+        addressContainer.style.display = selectedValue === '1' ? 'block' : 'none';
+    }
+
+    // Initialize on page load
+    toggleAddressVisibility();
+
+    // Add event listeners
+    deliveryRadios.forEach(radio => {
+        radio.addEventListener('change', toggleAddressVisibility);
     });
+});
 </script>
 @endpush
 @endsection

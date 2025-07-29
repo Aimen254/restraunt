@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('title', 'Admin Dashboard')
 @section('header', 'Admin Dashboard')
@@ -85,7 +85,7 @@
                     <a href="{{ route('admin.reservations.index') }}" class="col-span-1 flex items-center justify-center px-4 py-6 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         View Reservations
                     </a>
-                    <a href="#" class="col-span-1 flex items-center justify-center px-4 py-6 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                    <a href="{{ route('admin.orders.index') }}" class="col-span-1 flex items-center justify-center px-4 py-6 border border-gray-300 rounded-lg shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
                         View Orders
                     </a>
                 </div>

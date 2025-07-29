@@ -1,13 +1,13 @@
-@extends('layouts.app')
+@extends('spa')
 
 @section('title', 'Login')
 @section('header', 'Login to Your Account')
 
 @section('content')
 <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-    <form class="space-y-6" action="{{ route('login') }}" method="POST">
+    <form class="space-y-6 auth-form" action="{{ route('login') }}" method="POST">
         @csrf
-        <div>
+        <div class="input-group">
             <label for="email" class="block text-sm font-medium leading-6 text-gray-900">Email address</label>
             <div class="mt-2">
                 <input id="email" name="email" type="email" required 
@@ -15,7 +15,7 @@
             </div>
         </div>
 
-        <div>
+        <div class="input-group">
             <div class="flex items-center justify-between">
                 <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
                 @if (Route::has('password.request'))
@@ -31,9 +31,9 @@
         </div>
 
         <div>
-        <button type="submit" class="w-full bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
-            Sign in
-        </button>
+            <button type="submit" class="w-full btn bg-indigo-600 text-white py-2 px-4 rounded-md hover:bg-indigo-700">
+                Sign in
+            </button>
         </div>
     </form>
 
@@ -46,4 +46,9 @@
         </p>
     </div>
 </div>
+
+<script type="module">
+    import { AuthManager } from '/resources/js/modules/AuthManager.js';
+    new AuthManager();
+</script>
 @endsection

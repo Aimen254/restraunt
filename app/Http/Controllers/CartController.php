@@ -30,8 +30,9 @@ class CartController extends Controller
             'quantity' => 'required|integer|min:1'
         ]);
 
-        // Check if item already in cart
-        $cartItem = auth()->user()->cartItems()->where('menu_item_id', $menuItem->id)->first();
+        $cartItem = auth()->user()->cartItems()
+            ->where('menu_item_id', $menuItem->id)
+            ->first();
 
         if ($cartItem) {
             $cartItem->update([
@@ -45,26 +46,45 @@ class CartController extends Controller
             ]);
         }
 
-        return redirect()->route('cart.index')->with('success', 'Item added to cart');
-    }
+        $cartCount = auth()->user()->cartItems()->count();
 
-    public function destroy(Cart $cart)
-    {
-        $cart->delete();
-        return back()->with('success', 'Item removed from cart');
+        if (!$request->wantsJson()) {
+            return redirect()->route('cart.index')
+                ->with('success', 'Item added to cart');
+        }
+
+        // Return JSON for AJAX requests
+        return response()->json([
+            'success' => true,
+            'count' => $cartCount,
+            'message' => 'Item added to cart',
+            'redirect' => route('cart.index')
+        ]);
     }
 
     public function update(Cart $cart, Request $request)
     {
         $request->validate([
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1|max:10'
         ]);
 
-        $cart->update([
-            'quantity' => $request->quantity
-        ]);
+        $cart->update(['quantity' => $request->quantity]);
 
-        return response()->json(['success' => true]);
+        return response()->json([
+            'success' => true,
+            'subtotal' => number_format($cart->price * $request->quantity, 2),
+            'total' => $this->calculateTotal()
+        ]);
+    }
+
+    private function calculateTotal()
+    {
+        $subtotal = auth()->user()->cartItems->sum(function ($item) {
+            return $item->price * $item->quantity;
+        });
+        
+        $tax = $subtotal * 0.1;
+        return number_format($subtotal + $tax, 2);
     }
 
     public function checkout()
@@ -88,6 +108,14 @@ class CartController extends Controller
 
     public function processCheckout(Request $request)
     {
+        $request->validate([
+            'payment_method' => 'required|string|in:cash,card',
+            'is_delivery' => 'required|in:0,1',
+            'delivery_address' => 'required_if:is_delivery,1',
+            'special_instructions' => 'nullable|string|max:500',
+            'total_amount' => 'required|numeric',
+            'tax_amount' => 'required|numeric'
+        ]);
         $user = auth()->user();
         $cartItems = $user->cartItems()->with('menuItem')->get();
 
@@ -101,11 +129,13 @@ class CartController extends Controller
             'delivery_address' => 'required_if:is_delivery,true|string|max:255',
             'special_instructions' => 'nullable|string|max:500'
         ]);
-
+        $orderNumber = 'ORD-' . strtoupper(uniqid());
         // Create order
         $order = $user->orders()->create([
-            'total_amount' => $request->total_amount,
-            'tax_amount' => $request->tax_amount,
+            'order_number' => $orderNumber,
+            'total' => $request->total_amount,
+            'subtotal' => $request->total_amount,
+            'tax' => $request->tax_amount,
             'delivery_fee' => $request->is_delivery ? 5.00 : 0.00,
             'payment_method' => $request->payment_method,
             'status' => 'pending',
@@ -132,4 +162,11 @@ class CartController extends Controller
         // But if you want one, implement it like this:
         return view('cart.show', compact('cart'));
     }
+
+    public function destroy(Cart $cart)
+    {
+        $cart->delete();
+        return response()->json(['success' => true]);
+    }
+
 }

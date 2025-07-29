@@ -5,11 +5,13 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\MenuItem;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Storage;
 
 class MenuItemsTableSeeder extends Seeder
 {
     public function run()
     {
+
         $menuItems = [
             // Appetizers
             [
@@ -18,6 +20,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Toasted bread topped with tomatoes, garlic, and fresh basil',
                 'price' => 8.99,
                 'prep_time' => 10,
+                'image' => 'menu-items/bruschetta.jpg'
             ],
             [
                 'category' => 'Appetizers',
@@ -25,6 +28,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Fried squid served with marinara sauce',
                 'price' => 12.99,
                 'prep_time' => 15,
+                'image' => 'menu-items/calamari.jpg'
             ],
             // Main Courses
             [
@@ -33,6 +37,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Classic pasta with eggs, cheese, pancetta, and pepper',
                 'price' => 16.99,
                 'prep_time' => 20,
+                'image' => 'menu-items/spaghetti.jpg'
             ],
             [
                 'category' => 'Main Courses',
@@ -40,6 +45,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Fresh salmon fillet with lemon butter sauce',
                 'price' => 22.99,
                 'prep_time' => 25,
+                'image' => 'menu-items/salmon.jpg'
             ],
             // Desserts
             [
@@ -48,6 +54,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Classic Italian dessert with coffee-soaked ladyfingers',
                 'price' => 7.99,
                 'prep_time' => 10,
+                'image' => 'menu-items/tiramisu.jpg'
             ],
             [
                 'category' => 'Desserts',
@@ -55,6 +62,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Warm chocolate cake with a molten center',
                 'price' => 8.99,
                 'prep_time' => 15,
+                'image' => 'menu-items/lava-cake.jpg'
             ],
             // Drinks
             [
@@ -63,6 +71,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Refreshing freshly brewed iced tea',
                 'price' => 3.99,
                 'prep_time' => 5,
+                'image' => 'menu-items/iced-tea.jpg'
             ],
             [
                 'category' => 'Drinks',
@@ -70,6 +79,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => 'Glass of our signature house wine',
                 'price' => 7.99,
                 'prep_time' => 5,
+                'image' => 'menu-items/wine.jpg'
             ],
         ];
 
@@ -83,6 +93,7 @@ class MenuItemsTableSeeder extends Seeder
                 'description' => $item['description'],
                 'price' => $item['price'],
                 'prep_time' => $item['prep_time'],
+                'image' => $item['image'],
                 'is_active' => true,
             ]);
         }

@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             CategoriesTableSeeder::class,
             MenuItemsTableSeeder::class,
             TablesTableSeeder::class,
+             TestimonialSeeder::class,
         ]);
     }
 }
