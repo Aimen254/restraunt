@@ -32,3 +32,26 @@ footer a:hover { text-decoration: underline; }
 .menu-category::before { content: "◆ "; color: #4f46e5; }
 .price::after { content: " USD"; font-size: 0.8em; }
 .input-group::after { content: ""; clear: both; display: table; }
+
+.reservation-form .input-group { margin-bottom: 1.5rem; }
+.reservation-item .details { padding-left: 1rem; }
+.reservation-list .status-badge { font-size: 0.75rem; }
+
+/* Adjacent Selectors */
+.reservation-date + .reservation-time { margin-left: 0.5rem; }
+.reservation-form label + input { margin-top: 0.25rem; }
+.error-message + input { margin-top: 0.25rem; }
+
+/* ID Selectors */
+#reservation_date { min-width: 100%; }
+#reservation_time { width: 100%; }
+#party_size { width: 100%; }
+
+/* Pseudo-classes */
+.is-invalid:focus { border-color: #ef4444; }
+.reservation-item:hover { background-color: #f8fafc; }
+button[type="submit"]:disabled { opacity: 0.7; }
+
+/* Pseudo-elements */
+.reservation-time::after { content: " hrs"; }
+.status-badge::before { content: "Status: "; font-weight: normal; }

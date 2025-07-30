@@ -2,6 +2,8 @@
 import { CartManager } from './modules/CartManager';
 import { MenuSearch } from './modules/MenuSearch';
 import { AuthManager } from './modules/AuthManager';
+import { ReservationManager } from './modules/ReservationManager';
+import { OrderManager } from './modules/OrderManager';
 
 document.addEventListener('DOMContentLoaded', () => {
   const managers = [];
@@ -18,8 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     managers.push(new MenuSearch());
   }
 
-
-
+  if (document.querySelector('.cancel-reservation') || document.getElementById('reservation_date')) {
+    managers.push(new ReservationManager());
+  }
+    if (document.querySelector('.orders-list-container')) {
+        managers.push(new OrderManager());
+    }
   // Track total AJAX calls across all managers
   setInterval(() => {
     const totalAjax = managers.reduce((sum, mgr) => sum + (mgr.ajaxCount || 0), 0);

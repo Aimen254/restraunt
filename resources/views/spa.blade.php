@@ -28,7 +28,7 @@
                                class="{{ request()->routeIs('reservations*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                                 Reservations
                             </a>
-                            <a href="{{ route('orders.index') }}" 
+                            <a href="{{ route('my.order.index') }}" 
                                class="{{ request()->routeIs('orders*') ? 'border-indigo-500 text-gray-900' : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700' }} inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium">
                                 My Orders
                             </a>
@@ -101,10 +101,11 @@
                        class="{{ request()->routeIs('cart*') ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
                         Cart
                     </a>
-                    <a href="{{ route('orders.index') }}" 
-                       class="{{ request()->routeIs('orders*') ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
-                        My Orders
-                    </a>
+                   <a href="{{ route('my.order.index') }}" 
+   id="ajax-orders-link"
+   class="{{ request()->routeIs('orders*') ? 'bg-indigo-50 border-indigo-500 text-indigo-700' : 'border-transparent text-gray-500 hover:bg-gray-50 hover:border-gray-300 hover:text-gray-700' }} block pl-3 pr-4 py-2 border-l-4 text-base font-medium">
+    My Orders
+</a>
                 </div>
                 <div class="pt-4 pb-3 border-t border-gray-200">
                     <div class="flex items-center px-4">

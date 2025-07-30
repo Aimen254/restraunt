@@ -65,10 +65,10 @@
                             <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-sm font-medium text-blue-800">
                                 {{ \Carbon\Carbon::parse($reservation->reservation_date)->format('F j, Y') }}
                             </span>
-                            <form action="{{ route('reservations.destroy', $reservation) }}" method="POST">
-                                @csrf
+                             <form action="{{ route('reservations.destroy', $reservation) }}" method="POST" class="cancel-form">
+                                @csrf 
                                 @method('DELETE')
-                                <button type="submit" class="inline-flex items-center rounded-full bg-red-100 px-3 py-0.5 text-sm font-medium text-red-800 hover:bg-red-200">
+                                <button type="button" class="cancel-reservation inline-flex items-center rounded-full bg-red-100 px-3 py-0.5 text-sm font-medium text-red-800 hover:bg-red-200">
                                     Cancel
                                 </button>
                             </form>

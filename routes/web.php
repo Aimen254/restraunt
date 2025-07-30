@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Admin\MenuController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -27,6 +28,8 @@ Route::get('/menu/search', [MenuController::class, 'search'])->name('menu.search
     Route::post('cart-user/process-checkout', [App\Http\Controllers\CartController::class, 'processCheckout'])->name('cart.user.process-checkout');
     Route::resource('reservations', App\Http\Controllers\ReservationController::class);
     Route::resource('orders', App\Http\Controllers\OrderController::class);
+     Route::get('my-orders', [OrderController::class, 'index'])->name('my.order.index');
+    Route::get('my-orders/{order}/ajax', [OrderController::class, 'show'])->name('my.order.show');
 });
 
 // Admin routes
